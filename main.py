@@ -48,7 +48,7 @@ def read_prices():
         for col_index, value in enumerate(row):
             key = f"{row_index}_{col_index + 1}"  # Adjust for desired format
             processed_data[key] = value
-            pricessed_data[key].replace(" грн ". "")
+            pricessed_data[key].replace(" грн. ". "")
 
     return processed_data
 
