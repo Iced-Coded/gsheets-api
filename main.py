@@ -3,6 +3,7 @@ import os
 import json
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
+from fastapi.middleware.cors import CORSMiddleware
 import gspread
 from google.oauth2.service_account import Credentials
 import uvicorn  # Required to run the app programmatically
@@ -28,6 +29,23 @@ spreadsheet = gc.open("POLITIME Донат")
 worksheet = spreadsheet.sheet1
 
 app = FastAPI()
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+    "http://127.0.0.1:5500".
+    "https://ptime.infy.uk"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 api_password = os.environ["API_KEY"]
 
