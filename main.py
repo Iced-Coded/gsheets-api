@@ -29,7 +29,7 @@ worksheet = spreadsheet.sheet1
 
 app = FastAPI()
 
-api_password = os.environ["API_KEY]
+api_password = os.environ["API_KEY"]
 
 @app.get("/")
 def read_root():
