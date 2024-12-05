@@ -1,7 +1,7 @@
 from typing import Union
 import os
 import json
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
 import gspread
 from google.oauth2.service_account import Credentials
@@ -29,6 +29,8 @@ worksheet = spreadsheet.sheet1
 
 app = FastAPI()
 
+api_password = os.environ["API_KEY]
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -38,16 +40,19 @@ def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 @app.get("/prices")
-def read_prices():
+def read_prices(api_key):
     # Fetch range E2:G8
     data = worksheet.get("E2:G8")  # Adjust range as needed
 
-    # Process data into the desired format
-    processed_data = {}
-    for row_index, row in enumerate(data):
-        for col_index, value in enumerate(row):
-            key = f"{row_index}_{col_index + 1}"  # Adjust for desired format
-            processed_data[key] = value.replace(" грн. ", "")
+    if api_key == api_password:
+        # Process data into the desired format
+        processed_data = {}
+        for row_index, row in enumerate(data):
+            for col_index, value in enumerate(row):
+                key = f"{row_index}_{col_index + 1}"  # Adjust for desired format
+                processed_data[key] = value.replace(" грн. ", "")
+    else:
+        raise HTTPException(status_code=401, detail="Invalid API key")
 
     return processed_data
 
