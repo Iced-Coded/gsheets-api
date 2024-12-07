@@ -60,7 +60,7 @@ def read_item(item_id: int, q: Union[str, None] = None):
 @app.get("/prices")
 def read_prices(api_key):
     # Fetch range E2:G8
-    data = worksheet.get("E2:G9")  # Adjust range as needed
+    data = worksheet.get("E2:G15")  # Adjust range as needed
 
     if api_key == api_password:
         # Process data into the desired format
